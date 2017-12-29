@@ -159,7 +159,7 @@ THE SOFTWARE.
     this.idx = 0;
   };
 
-  Sequence.prototype.keydown = function keydown (keyCode) {
+  Sequence.prototype.keydown = function keydown (keyCode, eventObj) {
     var i = this.idx;
     if (keyCode !== this.keys[i]) {
       if (i > 0) {
@@ -170,8 +170,8 @@ THE SOFTWARE.
       return;
     }
 
-    this.next(this.str, this.seq[i], i, this.seq);
-    cheet.__next(this.str, this.seq[i], i, this.seq);
+    this.next(this.str, this.seq[i], i, this.seq, eventObj);
+    cheet.__next(this.str, this.seq[i], i, this.seq, eventObj);
 
     if (++this.idx === this.keys.length) {
       this.done(this.str);
@@ -204,13 +204,14 @@ THE SOFTWARE.
 
   function keydown (e) {
     var id,
-        k = e ? e.keyCode : event.keyCode;
+        eventObj = e || window.event,
+        k = eventObj.keyCode;
 
     if (held[k]) return;
     held[k] = true;
 
     for (id in sequences) {
-      sequences[id].keydown(k);
+      sequences[id].keydown(k, eventObj);
     }
   }
 
